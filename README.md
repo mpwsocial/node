@@ -1,8 +1,14 @@
 # MoiPayWay Node SDK
 
+Official Node.js SDK for the [MoiPayWay API](https://documenter.getpostman.com/view/11919136/2s93Joz7Bq).
+
+Use this client to call every endpoint in that collection: wallets, collections, transfers, users, verification, cards, catalogs, omnichain, and the rest of the documented surface.
+
 ```bash
 npm install @moipayway/node
 ```
+
+Requires Node 18+.
 
 ```js
 import { Client } from '@moipayway/node';
@@ -25,18 +31,27 @@ const order = await mpw.initiateCollection({
 });
 ```
 
-Any documented path:
+## API docs
+
+Paths, methods, and request bodies are in the public collection:
+
+[MoiPayWay API (Postman)](https://documenter.getpostman.com/view/11919136/2s93Joz7Bq)
+
+Call any of those endpoints with `request()`:
 
 ```js
 await mpw.request('POST', 'wallet/details', { wallet_id: '...' });
+await mpw.request('GET', 'user/misc/countries', {}, false);
 ```
 
-Webhook verification:
+- `test` → `https://dev.moipayway.co`
+- `live` → `https://api.moipayway.co`
+- Auth: `Authorization: Bearer <api_key>` (pass `auth: false` for documented catalog GETs)
+
+## Webhooks
 
 ```js
 import { verifyWebhook } from '@moipayway/node';
 
 const ok = verifyWebhook(rawBody, signatureHeader, timestampHeader, process.env.MOIPAYWAY_API_KEY);
 ```
-
-Requires Node 18+. Environment: `test` → `https://dev.moipayway.co`, `live` → `https://api.moipayway.co`.

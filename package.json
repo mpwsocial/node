@@ -1,7 +1,7 @@
 {
   "name": "@moipayway/node",
   "version": "0.1.0",
-  "description": "Official MoiPayWay Node.js SDK for merchant REST APIs.",
+  "description": "Official Node.js SDK for the MoiPayWay API.",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

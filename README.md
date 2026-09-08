@@ -1,9 +1,5 @@
 # MoiPayWay Node SDK
 
-Official Node.js SDK for the [MoiPayWay API](https://documenter.getpostman.com/view/11919136/2s93Joz7Bq).
-
-Use this client to call every endpoint in that collection: wallets, collections, transfers, users, verification, cards, catalogs, omnichain, and the rest of the documented surface.
-
 ```bash
 npm install @moipayway/node
 ```
@@ -15,12 +11,11 @@ import { Client } from '@moipayway/node';
 
 const mpw = new Client(process.env.MOIPAYWAY_API_KEY, 'test');
 
-const countries = await mpw.countries();
-const wallet = await mpw.createWallet({
+const wallet = await mpw.wallet.create({
   code: 'NGN',
   meta: { name: 'Operations', user_id: 'user-uuid' },
 });
-const order = await mpw.initiateCollection({
+const order = await mpw.wallet.collection.initiate({
   order_reference_code: 'ORD-1001',
   meta: {
     amount: '5000',
@@ -29,26 +24,21 @@ const order = await mpw.initiateCollection({
     user_id: 'user-uuid',
   },
 });
+const individual = await mpw.user.account.individual.create({ /* ... */ });
+const jobTypes = await mpw.user.misc.jobTypes();
+const lookup = await mpw.verification.lookup({ code: 'cac' });
 ```
 
-## API docs
+Collection paths are methods on the client:
 
-Paths, methods, and request bodies are in the public collection:
+- `POST wallet/create` → `mpw.wallet.create(body)`
+- `POST wallet/collection/initiate` → `mpw.wallet.collection.initiate(body)`
+- `POST user/account/individual/create` → `mpw.user.account.individual.create(body)`
+- `GET user/misc/job-types` → `mpw.user.misc.jobTypes()`
+- `POST verification/lookup` → `mpw.verification.lookup(body)`
+- `POST omnichain/wallet/evm/eoa/create-wallet` → `mpw.omnichain.wallet.evm.eoa.createWallet(body)`
 
-[MoiPayWay API (Postman)](https://documenter.getpostman.com/view/11919136/2s93Joz7Bq)
-
-Call any of those endpoints with `request()`:
-
-```js
-await mpw.request('POST', 'wallet/details', { wallet_id: '...' });
-await mpw.request('GET', 'user/misc/countries', {}, false);
-```
-
-- `test` → `https://dev.moipayway.co`
-- `live` → `https://api.moipayway.co`
-- Auth: `Authorization: Bearer <api_key>` (pass `auth: false` for documented catalog GETs)
-
-## Webhooks
+`test` uses `https://dev.moipayway.co`. `live` uses `https://api.moipayway.co`.
 
 ```js
 import { verifyWebhook } from '@moipayway/node';
